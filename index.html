@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthIQ — Health Risk Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #f6f8fa;
+      --panel:    #ffffff;
+      --panel2:   #f6f8fa;
+      --line:     #d0d7de;
+      --ink:      #1f2328;
+      --ink2:     #57606a;
+      --ink3:     #8c959f;
+      --green:    #1a7f37;
+      --green-bg: #dafbe1;
+      --amber:    #9a6700;
+      --amber-bg: #fff8c5;
+      --red:      #cf222e;
+      --red-bg:   #ffebe9;
+      --blue:     #0969da;
+      --blue-glow:rgba(9,105,218,.22);
+      --r: 6px;
+    }
+    [data-theme="dark"] {
+      --bg:       #0d1117;
+      --panel:    #161b22;
+      --panel2:   #1c2128;
+      --line:     #30363d;
+      --ink:      #e6edf3;
+      --ink2:     #8b949e;
+      --ink3:     #6e7681;
+      --green:    #3fb950;
+      --green-bg: #0d4429;
+      --amber:    #d29922;
+      --amber-bg: #2f2200;
+      --red:      #f85149;
+      --red-bg:   #2d0f0b;
+      --blue:     #388bfd;
+      --blue-glow:rgba(56,139,253,.22);
+    }
+
+    html { color-scheme: light dark; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px; line-height: 1.5;
+      color: var(--ink); background: var(--bg);
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+      transition: background .15s, color .15s;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--panel); border-bottom: 1px solid var(--line);
+      height: 48px; display: flex; align-items: center; padding: 0 16px;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .hdr {
+      width: 100%; max-width: 720px; margin: 0 auto;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 7px;
+      font-weight: 600; font-size: 14px; color: var(--ink); text-decoration: none;
+      flex-shrink: 0;
+    }
+    .logo-mark {
+      width: 22px; height: 22px; background: var(--green-bg);
+      border-radius: 5px; display: flex; align-items: center;
+      justify-content: center; font-size: 12px; line-height: 1;
+    }
+    nav { display: flex; gap: 2px; flex: 1; }
+    nav a {
+      font-size: 13px; font-weight: 500; color: var(--ink2);
+      text-decoration: none; padding: 3px 8px; border-radius: 5px;
+      transition: color .1s, background .1s;
+    }
+    nav a:hover { color: var(--ink); background: var(--panel2); }
+    nav a.on   { color: var(--ink); font-weight: 600; }
+    .tbtn {
+      width: 30px; height: 30px; border-radius: 5px;
+      background: none; border: 1px solid var(--line);
+      color: var(--ink2); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; transition: background .1s;
+      flex-shrink: 0;
+    }
+    .tbtn:hover { background: var(--panel2); color: var(--ink); }
+
+    /* ── Main ── */
+    main { max-width: 720px; margin: 28px auto; padding: 0 16px 64px; }
+
+    .ph { margin-bottom: 18px; }
+    h1  { font-size: 20px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 3px; }
+    .ph p { font-size: 13px; color: var(--ink2); }
+
+    /* ── Card ── */
+    .card {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: var(--r); overflow: hidden;
+    }
+    .card + * { margin-top: 12px; }
+
+    /* ── Form Sections ── */
+    .fs { padding: 14px 16px; }
+    .fs + .fs { border-top: 1px solid var(--line); }
+    .fl {
+      font-size: 11px; font-weight: 600; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--ink3); margin-bottom: 10px;
+    }
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .fld { display: flex; flex-direction: column; gap: 4px; }
+    .fld label { font-size: 12px; font-weight: 500; color: var(--ink2); }
+    .fld label em { font-style: normal; color: var(--ink3); font-weight: 400; }
+
+    input, select {
+      -webkit-appearance: none; appearance: none;
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 5px; padding: 6px 10px;
+      font-size: 13px; font-family: inherit; color: var(--ink);
+      outline: none; transition: border-color .12s, box-shadow .12s; width: 100%;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='5'%3E%3Cpath d='M0 0l5 5 5-5z' fill='%238c959f'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 9px center;
+      padding-right: 24px; cursor: pointer;
+    }
+    input:focus, select:focus {
+      border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-glow);
+    }
+    input::placeholder { color: var(--ink3); }
+    [data-theme="dark"] input, [data-theme="dark"] select { background: var(--panel2); }
+
+    /* ── Form footer ── */
+    .ff { padding: 12px 16px; background: var(--panel2); border-top: 1px solid var(--line); }
+    .btn {
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      width: 100%; padding: 8px 14px;
+      background: var(--green); color: #fff; border: none; border-radius: 5px;
+      font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer;
+      transition: filter .12s, box-shadow .12s;
+    }
+    .btn:hover { filter: brightness(1.08); box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+    .btn:active { filter: brightness(.96); }
+
+    /* ── Result ── */
+    .result {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: var(--r); overflow: hidden;
+      animation: up .2s ease;
+    }
+    @keyframes up {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .rh {
+      padding: 11px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+    .rh-title { font-size: 12px; font-weight: 600; color: var(--ink2); }
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 9px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    }
+    .badge-low      { color: var(--green); background: var(--green-bg); }
+    .badge-moderate { color: var(--amber); background: var(--amber-bg); }
+    .badge-high     { color: var(--red);   background: var(--red-bg);   }
+    .rb { padding: 12px 16px; }
+    .s-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--ink3); margin-bottom: 8px;
+    }
+    .slist { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .slist li {
+      font-size: 13px; color: var(--ink2);
+      padding: 7px 10px; border-radius: 5px;
+      background: var(--panel2); border: 1px solid var(--line);
+      display: flex; align-items: flex-start; gap: 7px;
+    }
+    .slist li::before { content: "›"; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+    @media (max-width: 540px) { .g2, .g3 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a href="/" class="logo">
+      <span class="logo-mark">✚</span>
+      HealthIQ
+    </a>
+    <nav>
+      <a href="/" class="on">Assessment</a>
+      <a href="/dashboard">Dashboard</a>
+    </nav>
+    <button class="tbtn" onclick="toggleTheme()" title="Toggle theme">
+      <span id="ti">🌙</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="ph">
+    <h1>Health Risk Assessment</h1>
+    <p>Enter your biometric and lifestyle data for an AI-powered health risk prediction.</p>
+  </div>
+
+  <div class="card">
+    <form method="POST">
+
+      <div class="fs">
+        <div class="fl">Basic Info</div>
+        <div class="g2">
+          <div class="fld">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="Age" placeholder="20" min="10" max="100">
+          </div>
+          <div class="fld">
+            <label for="gender">Gender</label>
+            <select id="gender" name="Gender">
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fl">Vital Signs</div>
+        <div class="g3">
+          <div class="fld">
+            <label for="hr">Heart Rate <em>(bpm)</em></label>
+            <input type="text" id="hr" name="Heart_Rate" placeholder="72">
+          </div>
+          <div class="fld">
+            <label for="bps">BP Systolic <em>(mmHg)</em></label>
+            <input type="text" id="bps" name="BP_Systolic" placeholder="120">
+          </div>
+          <div class="fld">
+            <label for="bpd">BP Diastolic <em>(mmHg)</em></label>
+            <input type="text" id="bpd" name="BP_Diastolic" placeholder="80">
+          </div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fl">Stress &amp; Mental State</div>
+        <div class="g3">
+          <div class="fld">
+            <label for="sbio">Biosensor Stress <em>(0–10)</em></label>
+            <input type="text" id="sbio" name="Stress_Bio" placeholder="5">
+          </div>
+          <div class="fld">
+            <label for="sself">Self-Report Stress <em>(0–10)</em></label>
+            <input type="text" id="sself" name="Stress_Self" placeholder="5">
+          </div>
+          <div class="fld">
+            <label for="mood">Mood</label>
+            <select id="mood" name="Mood">
+              <option>Happy</option>
+              <option>Neutral</option>
+              <option>Stressed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fl">Lifestyle</div>
+        <div class="g2">
+          <div class="fld">
+            <label for="activity">Physical Activity</label>
+            <select id="activity" name="Activity">
+              <option>Low</option>
+              <option>Moderate</option>
+              <option>High</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label for="sleep">Sleep Quality</label>
+            <select id="sleep" name="Sleep">
+              <option>Poor</option>
+              <option>Moderate</option>
+              <option>Good</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fl">Academic Load</div>
+        <div class="g2">
+          <div class="fld">
+            <label for="study">Study Hours <em>/ day</em></label>
+            <input type="text" id="study" name="Study_Hours" placeholder="6">
+          </div>
+          <div class="fld">
+            <label for="proj">Project Hours <em>/ day</em></label>
+            <input type="text" id="proj" name="Project_Hours" placeholder="2">
+          </div>
+        </div>
+      </div>
+
+      <div class="ff">
+        <button type="submit" class="btn">Predict Health Risk &nbsp;→</button>
+      </div>
+
+    </form>
+  </div>
+
+  {% if prediction %}
+  <div class="result">
+    <div class="rh">
+      <span class="rh-title">Prediction Result</span>
+      <span class="badge badge-{{ prediction | lower }}">{{ prediction }} Risk</span>
+    </div>
+    <div class="rb">
+      <div class="s-label">Preventive Actions</div>
+      <ul class="slist">
+        {% for s in suggestions %}
+        <li>{{ s }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
+</main>
+
+<script>
+  const root = document.documentElement;
+  const pref = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  const saved = localStorage.getItem('hiq-theme') || pref;
+  apply(saved);
+
+  function toggleTheme() {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    apply(next);
+    localStorage.setItem('hiq-theme', next);
+  }
+  function apply(t) {
+    root.setAttribute('data-theme', t);
+    document.getElementById('ti').textContent = t === 'dark' ? '☀️' : '🌙';
+  }
+</script>
+</body>
+</html>
